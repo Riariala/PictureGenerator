@@ -4,7 +4,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>6eea578c-caa9-4ee3-9fed-ef1ee8812ba7</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>VisualDisingn.py</StartupFile>
+    <StartupFile>main.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -21,6 +21,33 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Canvas.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CircleGen.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Genom.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Individ.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="LineGen.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="main.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Population.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="RectGen.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="UI.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="VisualDisingn.py" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
