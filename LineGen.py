@@ -23,3 +23,10 @@ class LineGen(_Genom_):
         self.endPoints = [arg[2],arg[3]]
         self.PenColor = (randint(0,255),randint(0,255),randint(0,255))
         self.width = randint(0,15)
+
+    def returnNewGen(self, neiborGen):
+        newGen = LineGen()
+        newGen.startPoints = self.startPoints
+        newGen.endPoints = neiborGen.endPoints
+        newGen.PenColor = (int((self.PenColor[0]+neiborGen.PenColor[0])/2), int((self.PenColor[1]+neiborGen.PenColor[1])/2), int((self.PenColor[2]+neiborGen.PenColor[2])/2))
+        return newGen

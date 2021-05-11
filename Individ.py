@@ -52,11 +52,15 @@ class Individ(object):
             self.gen[i] = self.gen[rand]
             self.gen[rand] = c
 
+    def generateByCrossover(self, parent1, Parent2):
+        for i in range(len(parent1.gen)):
+            self.gen.append(parent1.gen[i].returnNewGen(Parent2.gen[i]))
+
+
     def paintIndivid(self, drawImg):
         draws = drawImg
         for i in self.gen:
             print(i.startPoints, i.endPoints)
             draws = i.paintFigure(drawImg)
             drawImg = draws
-
         return drawImg

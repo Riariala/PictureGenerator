@@ -42,11 +42,11 @@ class Canvas(QWidget):
 
 
     def incrPictNum(self):
-        if self.pictNum < self.population.size:
+        if self.pictNum < len(self.population.individs):
             return self.pictNum + 1
         return 1
 
     def decrPictNum(self):
         if self.pictNum > 1:
             return self.pictNum - 1
-        return self.population.size
+        return len(self.population.individs)
