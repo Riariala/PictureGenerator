@@ -4,17 +4,24 @@ class Population(object):
     
     def __init__(self):
         self.size = 0
+        #self.newIndivids = []
+        self.subPopulation = []
         self.individs = []
         self.canvaSize = [0,0] #[x,y]
         self.countFigure = [0,0,0] #[circle, rect, line]
         self.oldIndivids = []
+        #self.cloneIndivid = 0
 
     def genetatePopulation(self):
         self.individs = []
         for i in range(self.size):
             self.individs.append(Individ.Individ(self.canvaSize[0],self.canvaSize[1]))
             self.individs[i].generateIndivid(self.countFigure)
-            print(self.individs[i].sizeX)
+            #print(self.individs[i].sizeX)
+        self.subPopulation = Population()
+        self.subPopulation.canvaSize = self.canvaSize
+        self.subPopulation.countFigure = self.countFigure
+        self.subPopulation.size = self.size
     
     def setFitToIndivid(self, fitVal, pictind):
          self.individs[pictind].fit = fitVal
@@ -30,11 +37,28 @@ class Population(object):
             if i.fit > mid:
                 self.individs.append(i)
        
-    def crossover(self, par1, par2):
-        print(par1,par2 )
+    def crossover_1(self, par1, par2):
         individ = Individ.Individ(self.canvaSize[0],self.canvaSize[1])
-        individ.generateByCrossover(self.individs[par1-1],self.individs[par2-1])
-        self.individs.append(individ)
+        individ.generateByCrossover_1(self.individs[par1-1],self.individs[par2-1])
+        self.subPopulation.individs.append(individ)
+
+    def crossover_2(self, par1, par2):
+        individ = Individ.Individ(self.canvaSize[0],self.canvaSize[1])
+        individ.generateByCrossover_2(self.individs[par1-1],self.individs[par2-1])
+        self.subPopulation.individs.append(individ)
+
+    def crossover_3(self, par1, par2):
+        individ = Individ.Individ(self.canvaSize[0],self.canvaSize[1])
+        individ.generateByCrossover_2(self.individs[par1-1],self.individs[par2-1])
+        self.subPopulation.individs.append(individ)
+
+    def prepareToSelect(self):
+        for i in self.subPopulation.individs:
+            self.individs.append(i)
+        self.subPopulation = Population()
+        self.subPopulation.canvaSize = self.canvaSize
+        self.subPopulation.countFigure = self.countFigure
+        self.subPopulation.size = self.size
 
     def setSize(self, text):
         if text.isdigit():
@@ -47,16 +71,16 @@ class Population(object):
     def setcanvaSizeX(self, text):
         if text.isdigit():
             n = int(text)
-            if n >= 250: ###
-                n = 250
+            if n >= 290: ###
+                n = 290
             self.canvaSize[0] = n
         print(self.canvaSize)
 
     def setcanvaSizeY(self, text):
         if text.isdigit():
             n = int(text)
-            if n >= 250: ###
-                n = 250
+            if n >= 290: ###
+                n = 290
             self.canvaSize[1] = n
         print(self.canvaSize)
 
@@ -83,5 +107,3 @@ class Population(object):
                 n = 100
             self.countFigure[2] = n
         print(self.countFigure)
-
-

@@ -6,7 +6,7 @@ class LineGen(_Genom_):
         super().__init__()
         self.PenColor = (0,0,0)
         self.width = 0
-
+        self.type = "l"
 
     def paintFigure(self, drawImg):
         drawImg.line((self.startPoints[0], self.startPoints[1], self.endPoints[0], self.endPoints[1]), fill=self.PenColor, width=self.width)
@@ -24,9 +24,23 @@ class LineGen(_Genom_):
         self.PenColor = (randint(0,255),randint(0,255),randint(0,255))
         self.width = randint(0,15)
 
-    def returnNewGen(self, neiborGen):
+    def returnNewGen_1(self, neiborGen):
         newGen = LineGen()
         newGen.startPoints = self.startPoints
         newGen.endPoints = neiborGen.endPoints
         newGen.PenColor = (int((self.PenColor[0]+neiborGen.PenColor[0])/2), int((self.PenColor[1]+neiborGen.PenColor[1])/2), int((self.PenColor[2]+neiborGen.PenColor[2])/2))
+        return newGen
+
+    def returnNewGen_2(self, neiborGen):
+        newGen = LineGen()
+        newGen.startPoints = neiborGen.startPoints
+        newGen.endPoints = neiborGen.endPoints
+        newGen.PenColor = self.PenColor
+        return newGen
+
+    def returnNewGen_3(self, neiborGen):
+        newGen = LineGen()
+        newGen.startPoints = self.startPoints
+        newGen.endPoints = (self.endPoints[0], neiborGen.endPoints[1])
+        newGen.PenColor = neiborGen.PenColor
         return newGen
