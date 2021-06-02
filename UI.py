@@ -81,7 +81,6 @@ class Interface(QMainWindow):
         self.lineSetter = QtWidgets.QLineEdit(self)
         self.lineSetter.move(60, 380)
         self.lineSetter.textChanged[str].connect(self.population.setLineCount)
-
         
         
                 #Selection
@@ -210,6 +209,16 @@ class Interface(QMainWindow):
         self.mchangeOrderBtn.hide()
         self.mchangeOrderBtn.clicked.connect(self.changeOrder)
 
+        self.mchangeColorBtn = QtWidgets.QPushButton("Сменить цвет", self)
+        self.mchangeColorBtn.move(200, 300)
+        self.mchangeColorBtn.hide()
+        self.mchangeColorBtn.clicked.connect(self.changeColor)
+
+        self.mcancelMutationbtn = QtWidgets.QPushButton("Отмена изменений", self)
+        self.mcancelMutationbtn.move(200, 500)
+        self.mcancelMutationbtn.hide()
+        self.mcancelMutationbtn.clicked.connect(self.canselMutation)
+
 
         self.mainwind.setCurrentIndex(0)
 
@@ -283,8 +292,6 @@ class Interface(QMainWindow):
 
     def showMutation(self):
         self.mainwind.setCurrentIndex(3)
-        #for i in self.population.subPopulation.individs:
-        #    print(i.gen[0])
         self.GenerCanvas = [Canvas.Canvas(self.population.subPopulation, 1)]
         self.vboxm.addWidget(self.GenerCanvas[0])
         self.GenerCanvas[0].drawImage()
@@ -292,13 +299,17 @@ class Interface(QMainWindow):
         self.mutPictPrevBtn.show()
         self.mchangeOrderBtn.show()
         self.MNext.show()
+        self.mcancelMutationbtn.show()
+        self.mchangeColorBtn.show()
 
     def hideMutation(self):
         self.hboxs.removeWidget(self.GenerCanvas[0])
         self.mutPictNextBtn.hide()
         self.mutPictPrevBtn.hide()
         self.MNext.hide()
-
+        self.mcancelMutationbtn.hide()
+        self.mchangeOrderBtn.hide()
+        self.mchangeColorBtn.hide()
 
 
     def callCrossover_1(self):
@@ -311,21 +322,27 @@ class Interface(QMainWindow):
         self.population.crossover_3(self.GenerCanvas[0].pictNum, self.GenerCanvas[1].pictNum)
 
     def changeOrder(self):
-        print(self.GenerCanvas[0].pictNum)
         self.population.subPopulation.individs[self.GenerCanvas[0].pictNum - 1].changeOrderfunc()
         self.GenerCanvas[0].population = self.population.subPopulation
         self.GenerCanvas[0].changeImage()
-        self.GenerCanvas[0].drawImage()
-        #self.population.cloneIndivid = self.population.subPopulation.individs[self.GenerCanvas[0].self.pictNum - 1]
-        #origPict
-        #self.GenerCanvas[0].IndivisCopy = self.GenerCanvas[0].population.subPopulation[self.GenerCanvas[0].pictNum]
+
+    def changeColor(self):
+        self.population.subPopulation.individs[self.GenerCanvas[0].pictNum - 1].changeColorfunc()
+        self.GenerCanvas[0].population = self.population.subPopulation
+        self.GenerCanvas[0].changeImage()
+
+    def canselMutation(self):
+        print(self.GenerCanvas[0].population.individs[self.GenerCanvas[0].pictNum - 1].gen[0],self.GenerCanvas[0].origPict.gen[0] )
+        if self.GenerCanvas[0].origPict:
+            self.GenerCanvas[0].population.individs[self.GenerCanvas[0].pictNum - 1] = self.GenerCanvas[0].origPict
+            self.GenerCanvas[0].changeImage()
 
     def changeValueSelect(self, value):
         self.selectLabel.setText("<div style ='color: #ff0000' >"+str(value)+"</div>")
         pictind = self.GenerCanvas[0].pictNum-1
         self.population.setFitToIndivid(value, pictind)
 
-    def drawPictINCurrLay(self, canvacount, n): #!!!!!!!!!!!!!1добовать остальные слои
+    def drawPictINCurrLay(self, canvacount, n):
         if self.layout == 1 :
             self.vboxs.removeWidget(self.GenerCanvas[canvacount])
             self.GenerCanvas[canvacount] = Canvas.Canvas( self.population, n)
@@ -356,7 +373,6 @@ class Interface(QMainWindow):
     def setSaveName(self,text):
         self.population.individs[self.GenerCanvas[0].pictNum-1].setName(text)
 
-
     def savePicturefnc(self):
         self.GenerCanvas[0].savePicture()
 
@@ -366,7 +382,7 @@ class Interface(QMainWindow):
                 self.population.genetatePopulation()
                 if self.GenerCanvas[0] != 0:
                     self.vboxg.removeWidget(self.GenerCanvas[0])
-                self.GenerCanvas = [Canvas.Canvas( self.population, 1)]
+                self.GenerCanvas = [Canvas.Canvas(self.population, 1)]
                 self.GenerCanvas[0].move(800,100)
                 self.hboxg.addWidget(self.GenerCanvas[0])
                 self.GenerCanvas[0].drawImage()

@@ -19,15 +19,12 @@ class Canvas(QWidget):
         self.pictNum = nm
         self.origPict = 0
         if self.population.individs:
-            self.origPict = self.population.individs[self.pictNum-1]
+            self.origPict = self.population.individs[self.pictNum-1].copyIndivid()
         self.initUI()
 
     def initUI(self):
-        #if self.pictNum <= len(self.population.individs):
-        #save button here
         self.img = Image.new("RGB",  (self.canvaSize[0],self.canvaSize[1]), 'white')
         self.imgDraw = ImageDraw.Draw(self.img)
-        ##print(self.pictNum)
         if self.pictNum > 0 and self.pictNum <=len(self.population.individs):
             print(self.pictNum, len(self.population.individs), self.population.individs[self.pictNum-1].gen[0], self.canvaSize)
             self.imgDraw = self.population.individs[self.pictNum-1].paintIndivid(self.imgDraw)
@@ -43,13 +40,14 @@ class Canvas(QWidget):
         pixmap = QPixmap(QImage(qim))
         lbl = QLabel(self)
         lbl.setPixmap(pixmap)
-        #self.show()
+        lbl.show()
 
     def changeImage(self):
         self.img = Image.new("RGB", (self.canvaSize[0],self.canvaSize[1]), 'white')
         self.imgDraw = ImageDraw.Draw(self.img)
         if self.pictNum > 0 and self.pictNum <=len(self.population.individs):
             self.imgDraw = self.population.individs[self.pictNum-1].paintIndivid(self.imgDraw)
+        self.drawImage()
 
     def incrPictNum(self):
         if self.pictNum < len(self.population.individs):
@@ -74,7 +72,6 @@ class Canvas(QWidget):
                 count += 1
                 nameaddition = "(" + str(count) +").jpg"
                 print(name, files, nameaddition)
-        #count = len([files for address, dirs, files in os.walk("savedpict//") if name in files]) ###
         if count != 0:
             name += nameaddition
         savename = "savedpict//"+name

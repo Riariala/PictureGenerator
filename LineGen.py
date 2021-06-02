@@ -5,6 +5,7 @@ class LineGen(_Genom_):
     def __init__(self):
         super().__init__()
         self.PenColor = (0,0,0)
+        self.BrushColor = 0
         self.width = 0
         self.type = "l"
 
@@ -29,6 +30,10 @@ class LineGen(_Genom_):
         newGen.startPoints = self.startPoints
         newGen.endPoints = neiborGen.endPoints
         newGen.PenColor = (int((self.PenColor[0]+neiborGen.PenColor[0])/2), int((self.PenColor[1]+neiborGen.PenColor[1])/2), int((self.PenColor[2]+neiborGen.PenColor[2])/2))
+        newGen.width = self.width
+        if type(neiborGen) == LineGen:
+            if randint(0,1) == 0:
+                newGen.width = neiborGen.width
         return newGen
 
     def returnNewGen_2(self, neiborGen):
@@ -36,6 +41,10 @@ class LineGen(_Genom_):
         newGen.startPoints = neiborGen.startPoints
         newGen.endPoints = neiborGen.endPoints
         newGen.PenColor = self.PenColor
+        newGen.width = self.width
+        if type(neiborGen) == LineGen:
+            if randint(0,1) == 0:
+                newGen.width = neiborGen.width
         return newGen
 
     def returnNewGen_3(self, neiborGen):
@@ -43,4 +52,8 @@ class LineGen(_Genom_):
         newGen.startPoints = self.startPoints
         newGen.endPoints = (self.endPoints[0], neiborGen.endPoints[1])
         newGen.PenColor = neiborGen.PenColor
+        newGen.width = self.width
+        if type(neiborGen) == LineGen:
+            if randint(0,1) == 0:
+                newGen.width = neiborGen.width
         return newGen

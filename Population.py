@@ -49,7 +49,7 @@ class Population(object):
 
     def crossover_3(self, par1, par2):
         individ = Individ.Individ(self.canvaSize[0],self.canvaSize[1])
-        individ.generateByCrossover_2(self.individs[par1-1],self.individs[par2-1])
+        individ.generateByCrossover_3(self.individs[par1-1],self.individs[par2-1])
         self.subPopulation.individs.append(individ)
 
     def prepareToSelect(self):
@@ -71,16 +71,16 @@ class Population(object):
     def setcanvaSizeX(self, text):
         if text.isdigit():
             n = int(text)
-            if n >= 290: ###
-                n = 290
+            if n >= 250: ###
+                n = 250
             self.canvaSize[0] = n
         print(self.canvaSize)
 
     def setcanvaSizeY(self, text):
         if text.isdigit():
             n = int(text)
-            if n >= 290: ###
-                n = 290
+            if n >= 250: ###
+                n = 250
             self.canvaSize[1] = n
         print(self.canvaSize)
 

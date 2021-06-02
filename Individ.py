@@ -5,6 +5,7 @@ import LineGen
 import RectGen
 from random import randint
 from itertools import chain
+import copy
 
 class Individ(object):
     
@@ -14,9 +15,8 @@ class Individ(object):
         self.gen = []
         self.fit = 0
         self.name = ''
-        #self.createIndivid()
 
-    def generateIndivid(self, figures):  #Как установить порядок? Перемешиванием? (как вариант.... а потом передавать порядок "генетически"?)
+    def generateIndivid(self, figures):
         self.gen = []
         figersum = sum(figures)
         self.gen.append([i for i in range(1, figersum+1)])
@@ -55,6 +55,11 @@ class Individ(object):
             self.gen[0][i] = self.gen[0][rand]
             self.gen[0][rand] = c
 
+    def copyIndivid(self):
+        newIndivid = Individ(self.sizeX,self.sizeY)
+        newIndivid.gen = copy.deepcopy(self.gen)
+        print("copy", newIndivid.gen[0])
+        return newIndivid
 
     def orderlyCrossing(self, par1, par2):
         leng = len(par1.gen[0])
@@ -100,16 +105,25 @@ class Individ(object):
     def generateByCrossover_2(self, parent1, Parent2):
         self.orderlyCrossing(parent1, Parent2)
         for i in range(1, len(parent1.gen)):
+            self.gen.append(parent1.gen[i].returnNewGen_2(Parent2.gen[i]))
+
+    def generateByCrossover_3(self, parent1, Parent2):
+        self.orderlyCrossing(parent1, Parent2)
+        for i in range(1, len(parent1.gen)):
             self.gen.append(parent1.gen[i].returnNewGen_3(Parent2.gen[i]))
 
     def changeOrderfunc(self):
         randomgen1 = randint(0, len(self.gen[0])-1)
         randomgen2 = randint(0, len(self.gen[0])-1)
-        print(randomgen1, randomgen2)
         buf = self.gen[0][randomgen1]
         self.gen[0][randomgen1] = self.gen[0][randomgen2]
         self.gen[0][randomgen2] = buf
-        print(self.gen)
+
+    def changeColorfunc(self):
+        randomgen1 = randint(1, len(self.gen[0]))
+        self.gen[randomgen1].PenColor = (randint(0,255),randint(0,255),randint(0,255))
+        if self.gen[randomgen1].BrushColor:
+            self.gen[randomgen1].BrushColor = (randint(0,255),randint(0,255),randint(0,255))
 
     def setName(self,text):
         if len(text) <= 25:
