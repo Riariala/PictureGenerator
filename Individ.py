@@ -15,6 +15,26 @@ class Individ(object):
         self.gen = []
         self.fit = 0
         self.name = ''
+        self.delInd = False
+
+    def generateCoord(self):
+        x1 = randint(0,self.sizeX)
+        x2 = randint(0,self.sizeX)
+        if x1>x2:
+            stx = x2 
+            enx = x1
+        else:
+            stx = x1 
+            enx = x2
+        y1 = randint(0,self.sizeY)
+        y2 = randint(0,self.sizeY)
+        if y1>y2:
+            sty = y2 
+            eny = y1
+        else:
+            sty = y1 
+            eny = y2
+        return [stx,sty,enx,eny]
 
     def generateIndivid(self, figures):
         self.gen = []
@@ -29,25 +49,10 @@ class Individ(object):
                     self.gen.append(RectGen.RectGen())
                 elif i == 2:
                     self.gen.append(LineGen.LineGen())
-                x1 = randint(0,self.sizeX)
-                x2 = randint(0,self.sizeX)
-                if x1>x2:
-                    stx = x2 
-                    enx = x1
-                else:
-                    stx = x1 
-                    enx = x2
-                y1 = randint(0,self.sizeY)
-                y2 = randint(0,self.sizeY)
-                if y1>y2:
-                    sty = y2 
-                    eny = y1
-                else:
-                    sty = y1 
-                    eny = y2
+                coord = self.generateCoord()
                 lent = len(self.gen) - 1
                 if lent >= 0:
-                    self.gen[lent].generateGenom(stx,sty,enx,eny)
+                    self.gen[lent].generateGenom(coord[0],coord[1],coord[2],coord[3])
 
         for i in range(figersum): #перемешиваем для смены порядка прорисовки
             rand = randint(0, figersum-1)
@@ -97,20 +102,27 @@ class Individ(object):
                 self.gen[0][i] = par1.gen[0][i]
 
 
-    def generateByCrossover_1(self, parent1, Parent2):
-        self.orderlyCrossing(parent1, Parent2)
+    def generateByCrossover_1(self, parent1, parent2):
+        self.orderlyCrossing(parent1, parent2)
         for i in range(1, len(parent1.gen)):
-            self.gen.append(parent1.gen[i].returnNewGen_1(Parent2.gen[i]))
+            self.gen.append(parent1.gen[i].returnNewGen_1(parent2.gen[i]))
 
-    def generateByCrossover_2(self, parent1, Parent2):
-        self.orderlyCrossing(parent1, Parent2)
+    def generateByCrossover_2(self, parent1, parent2):
+        self.orderlyCrossing(parent1, parent2)
         for i in range(1, len(parent1.gen)):
-            self.gen.append(parent1.gen[i].returnNewGen_2(Parent2.gen[i]))
+            self.gen.append(parent1.gen[i].returnNewGen_2(parent2.gen[i]))
 
-    def generateByCrossover_3(self, parent1, Parent2):
-        self.orderlyCrossing(parent1, Parent2)
+    def generateByCrossover_3(self, parent1, parent2):
+        self.orderlyCrossing(parent1, parent2)
         for i in range(1, len(parent1.gen)):
-            self.gen.append(parent1.gen[i].returnNewGen_3(Parent2.gen[i]))
+            self.gen.append(parent1.gen[i].returnNewGen_3(parent2.gen[i]))
+
+    def generateByCrossover_4(self, parent1, parent2):
+        self.orderlyCrossing(parent1, parent2)
+        for i in range(1, len(parent1.gen)//2):
+            self.gen.append(copy.deepcopy(parent1.gen[i]))
+        for i in range(len(parent1.gen)//2, len(parent1.gen)):
+            self.gen.append(copy.deepcopy(parent2.gen[i]))
 
     def changeOrderfunc(self):
         randomgen1 = randint(0, len(self.gen[0])-1)
@@ -120,10 +132,17 @@ class Individ(object):
         self.gen[0][randomgen2] = buf
 
     def changeColorfunc(self):
-        randomgen1 = randint(1, len(self.gen[0]))
-        self.gen[randomgen1].PenColor = (randint(0,255),randint(0,255),randint(0,255))
-        if self.gen[randomgen1].BrushColor:
-            self.gen[randomgen1].BrushColor = (randint(0,255),randint(0,255),randint(0,255))
+        randomgen = randint(1, len(self.gen[0]))
+        self.gen[randomgen].PenColor = (randint(0,255),randint(0,255),randint(0,255))
+        if self.gen[randomgen].BrushColor:
+            self.gen[randomgen].BrushColor = (randint(0,255),randint(0,255),randint(0,255))
+
+    def changePosfunc(self):
+        randomgen = randint(1, len(self.gen[0]))
+        coord = self.generateCoord()
+        self.gen[randomgen].startPoints = [coord[0],coord[1]]
+        self.gen[randomgen].endPoints = [coord[2],coord[3]]
+
 
     def setName(self,text):
         if len(text) <= 25:

@@ -44,3 +44,11 @@ class CircleGen(_Genom_):
         newGen.PenColor = neiborGen.PenColor
         newGen.BrushColor = self.BrushColor
         return newGen
+
+    def returnNewGen_3(self, neiborGen):
+        newGen = CircleGen()
+        newGen.startPoints = self.startPoints
+        newGen.endPoints = (self.endPoints[0], neiborGen.endPoints[1])
+        newGen.PenColor = neiborGen.PenColor
+        newGen.BrushColor = self.BrushColor
+        return newGen
