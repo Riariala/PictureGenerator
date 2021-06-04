@@ -24,10 +24,9 @@ class Canvas(QWidget):
 
     def initUI(self):
         self.img = Image.new("RGB",  (self.canvaSize[0],self.canvaSize[1]), 'white')
-        self.imgDraw = ImageDraw.Draw(self.img)
         if self.pictNum > 0 and self.pictNum <=len(self.population.individs):
-            print(self.pictNum, len(self.population.individs), self.population.individs[self.pictNum-1].gen[0], self.canvaSize)
-            self.imgDraw = self.population.individs[self.pictNum-1].paintIndivid(self.imgDraw)
+            self.img = self.population.individs[self.pictNum-1].img
+            self.imgDraw = self.population.individs[self.pictNum-1].imgDrawn
 
     def paintEvent(self, e):
         qp = QPainter()
@@ -44,10 +43,9 @@ class Canvas(QWidget):
 
     def changeImage(self):
         self.img = Image.new("RGB", (self.canvaSize[0],self.canvaSize[1]), 'white')
-        self.imgDraw = ImageDraw.Draw(self.img)
         if self.pictNum > 0 and self.pictNum <=len(self.population.individs):
-            self.imgDraw = self.population.individs[self.pictNum-1].paintIndivid(self.imgDraw)
-        self.drawImage()
+            self.img = self.population.individs[self.pictNum-1].img
+            self.imgDraw = self.population.individs[self.pictNum-1].imgDrawn
 
     def incrPictNum(self):
         if self.pictNum < len(self.population.individs):
@@ -55,6 +53,7 @@ class Canvas(QWidget):
         return 1
 
     def decrPictNum(self):
+        print(self.pictNum)
         if self.pictNum > 1:
             return self.pictNum - 1
         return len(self.population.individs)

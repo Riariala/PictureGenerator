@@ -23,6 +23,11 @@ class Interface(QMainWindow):
         self.setWindowTitle("Step 0: Generetion")
         self.mainwind = QtWidgets.QStackedWidget()
         self.setCentralWidget(self.mainwind)
+        p = self.palette()
+        p.setColor(self.backgroundRole(), QColor(50,140,136))
+        self.setPalette(p)
+        self.mainFont = QtGui.QFont("Helvetica [Cronyx]", 18, QtGui.QFont.Bold)
+        self.headFont = QtGui.QFont("Helvetica [Cronyx]", 25, QtGui.QFont.Bold)
 
 
                 #Generation
@@ -32,8 +37,13 @@ class Interface(QMainWindow):
         self.hboxg = QHBoxLayout()
         self.vboxg.addLayout(self.hboxg)
         self.genLay.setLayout(self.vboxg)
-        self.hboxg.insertSpacing(0, 800)
-        self.vboxg.insertSpacing(0, 200)
+        self.hboxg.insertSpacing(0, 900)
+        self.vboxg.insertSpacing(0, 250)
+
+        self.GenNameLbl =  QLabel(self)
+        self.GenNameLbl.setText("<div style='color: rgb(255, 255, 255); background-color: rgb(45,125,120); text-align: center; padding-top: 20px;'> Генерация первого поколения </div>")
+        self.GenNameLbl.setFont(self.headFont)
+        self.GenNameLbl.setGeometry(QtCore.QRect(0, 0, 1500, 100))
     
         self.GNext = QtWidgets.QPushButton("К отбору", self)
         self.GNext.move(1350, 800)
@@ -44,48 +54,60 @@ class Interface(QMainWindow):
         self.GenerateBtn.move(100, 800)
         self.GenerateBtn.clicked.connect(self.repaintImage)
 
-        self.PopSizeLbl =  QLabel(self)
-        self.PopSizeLbl.move(50,50)
-        #self.PopSizeLbl.setText("<div style ='color: #ff0000' >Количество в первом поколении</div>")
-        self.PopSizeLbl.setText("Количество в первом поколении")
-        self.PopSizeLbl.adjustSize()
-        self.PopSizeSetter = QtWidgets.QLineEdit(self)
-        self.PopSizeSetter.move(60, 100)
-        self.PopSizeSetter.textChanged[str].connect(self.population.setSize)
-
         self.XLabel =  QLabel(self)
-        self.XLabel.move(50,150)
-        self.XLabel.setText("X")
+        self.XLabel.setGeometry(QtCore.QRect(0, 100, 70, 50))
+        self.XLabel.setText("<div style='color: rgb(255, 255, 255); text-align: right;'> X </div>")
+        self.XLabel.setFont(self.mainFont)
         self.CanvasSizeSetterX = QtWidgets.QLineEdit(self)
-        self.CanvasSizeSetterX.move(60, 150)
+        self.CanvasSizeSetterX.setGeometry(QtCore.QRect(90, 100, 400, 50))
         self.CanvasSizeSetterX.textChanged[str].connect(self.population.setcanvaSizeX)
         self.YLabel =  QLabel(self)
-        self.YLabel.move(190,150)
-        self.YLabel.setText("Y")
+        self.YLabel.setGeometry(QtCore.QRect(490, 100, 70, 50))
+        self.YLabel.setText("<div style='color: rgb(255, 255, 255); text-align: right;'>Y</div>")
+        self.YLabel.setFont(self.mainFont)
         self.CanvasSizeSetterY = QtWidgets.QLineEdit(self)
-        self.CanvasSizeSetterY.move(200, 150)
+        self.CanvasSizeSetterY.setGeometry(QtCore.QRect(580, 100, 400, 50))
         self.CanvasSizeSetterY.textChanged[str].connect(self.population.setcanvaSizeY)
 
+        self.PopSizeLbl =  QLabel(self)
+        self.PopSizeLbl.setText("<div style='color: rgb(255, 255, 255); text-align: right;'> Количество в первом поколении </div>")
+        self.PopSizeLbl.setGeometry(QtCore.QRect(0, 155, 550, 50))
+        self.PopSizeLbl.setFont(self.mainFont)
+        #self.PopSizeLbl.adjustSize()
+        self.PopSizeSetter = QtWidgets.QLineEdit(self)
+        self.PopSizeSetter.setGeometry(QtCore.QRect(580, 155, 400, 50))
+        self.PopSizeSetter.textChanged[str].connect(self.population.setSize)
+
+        self.mutchanseLabel =  QLabel(self)
+        self.mutchanseLabel.setGeometry(QtCore.QRect(0, 210, 550, 50))
+        self.mutchanseLabel.setText("<div style='color: rgb(255, 255, 255); text-align: right;'>Шанс мутации (%)</div>")
+        self.mutchanseLabel.setFont(self.mainFont)
+        self.mutChanceSetter = QtWidgets.QLineEdit(self)
+        self.mutChanceSetter.setGeometry(QtCore.QRect(580, 210, 400, 50))
+        self.mutChanceSetter.textChanged[str].connect(self.population.setMutationChance)
+
         self.circleLabel =  QLabel(self)
-        self.circleLabel.move(50,190)
+        self.circleLabel.move(50,300)
         self.circleLabel.setText("circles")
         self.circleSetter = QtWidgets.QLineEdit(self)
-        self.circleSetter.move(60, 220)
+        self.circleSetter.move(80, 300)
         self.circleSetter.textChanged[str].connect(self.population.setCircleCount)
 
         self.rectLabel =  QLabel(self)
-        self.rectLabel.move(50,270)
+        self.rectLabel.move(50,350)
         self.rectLabel.setText("rectangles")
         self.rectSetter = QtWidgets.QLineEdit(self)
-        self.rectSetter.move(60, 300)
+        self.rectSetter.move(700, 370)
         self.rectSetter.textChanged[str].connect(self.population.setRectCount)
 
         self.lineLabel =  QLabel(self)
-        self.lineLabel.move(50,350)
+        self.lineLabel.move(50,410)
         self.lineLabel.setText("lines")
         self.lineSetter = QtWidgets.QLineEdit(self)
-        self.lineSetter.move(60, 380)
+        self.lineSetter.move(700, 420)
         self.lineSetter.textChanged[str].connect(self.population.setLineCount)
+
+
         
         
                 #Selection
@@ -122,29 +144,29 @@ class Interface(QMainWindow):
         self.ImgPrev.clicked.connect(self.callPrevPict(0))
         self.ImgNext.clicked.connect(self.callNextPict(0))
 
+        self.setPictRang = QtWidgets.QLineEdit(self)
+        self.setPictRang.move(650, 550)
+        self.setPictRang.textChanged[str].connect(self.callPictRangSetter)
+        self.setPictRang.hide()
+        self.warning1 =  QLabel(self)
+        self.warning1.setGeometry(QtCore.QRect(0, 600, 1000, 50))
+        self.warning1.setText("<div style='color: rgb(255, 255, 255); text-align: center;'>Убедитесь, что расставили значения для всех изображений</div>")
+        self.warning1.setFont(self.mainFont)
+        self.warning1.hide()
 
-        self.selectdelinfo =  QLabel(self)
-        self.selectdelinfo.move(50,80)
-        #self.selectdelinfo.setText("<div style ='color: #ff0000' >Количество в первом поколении</div>")
-        self.selectdelinfo.setText("Данное изображение будет удалено")
-        self.selectdelinfo.adjustSize()
-        self.selectdelinfo.hide()
+        ####
+        #self.selectdelinfo =  QLabel(self)
+        #self.selectdelinfo.move(50,80)
+        ##self.selectdelinfo.setText("<div style ='color: #ff0000' >Количество в первом поколении</div>")
+        #self.selectdelinfo.setText("Данное изображение будет удалено")
+        #self.selectdelinfo.adjustSize()
+        #self.selectdelinfo.hide()
 
-        self.delornotPictureBtn = QtWidgets.QPushButton("Оставить", self)
-        self.delornotPictureBtn.move(50, 200)
-        self.delornotPictureBtn.clicked.connect(self.changedelstatus)
-        self.delornotPictureBtn.hide()
-
-        #self.NoBtnselect = QtWidgets.QPushButton("Оставить", self)
-        #self.NoBtnselect.move(130, 200)
-        #self.NoBtnselect.clicked.connect(self.changeValueSelect)
-        #self.NoBtnselect.hide()
-        #self.sld1 = QSlider(Qt.Horizontal, self)
-        #self.sld1.setFocusPolicy(Qt.NoFocus)
-        #self.sld1.setGeometry(50, 150, 230, 30)
-        #self.sld1.valueChanged[int].connect(self.changeValueSelect)
-        
-        #self.sld1.hide()
+        #self.delornotPictureBtn = QtWidgets.QPushButton("Оставить", self)
+        #self.delornotPictureBtn.move(50, 200)
+        #self.delornotPictureBtn.clicked.connect(self.changedelstatus)
+        #self.delornotPictureBtn.hide()
+        ####
 
                 #Crossover
         self.crosLay = QWidget()
@@ -204,9 +226,9 @@ class Interface(QMainWindow):
 
 
                 #Mutation
-        self.MNext = QtWidgets.QPushButton("Далее", self)
+        self.MNext = QtWidgets.QPushButton("Далее", self) ####!!!!
         self.MNext.move(1350, 800)
-        self.MNext.clicked.connect(self.chageLay)
+        self.MNext.clicked.connect(self.endCycle)
         self.MNext.hide()
 
         self.mutLay = QWidget()
@@ -253,6 +275,7 @@ class Interface(QMainWindow):
 
 
     def hideGeneration(self):
+        self.GenNameLbl.hide()
         self.PopSizeLbl.hide()
         self.GNext.hide()
         self.PopSizeSetter.hide()
@@ -267,6 +290,8 @@ class Interface(QMainWindow):
         self.lineLabel.hide()
         self.lineSetter.hide()
         self.GenerateBtn.hide()
+        self.mutChanceSetter.hide()
+        self.mutchanseLabel.hide()
 
     def showSelection(self):
         self.mainwind.setCurrentIndex(1) #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -276,25 +301,26 @@ class Interface(QMainWindow):
         self.GenerCanvas = [Canvas.Canvas(self.population, 1)]
         self.hboxs.addWidget(self.GenerCanvas[0])
         self.GenerCanvas[0].drawImage()
-        #self.sld1.show()
-        #self.selectLabel.show()
         self.SavePicbtn.show()
         self.setPictName.show()
-        self.delornotPictureBtn.show()
-        self.selectdelinfo.show()
+        #self.delornotPictureBtn.show()
+        #self.selectdelinfo.show()
+        self.setPictRang.show()
+        self.warning1.show()
 
     def hideSelection(self):
         self.hboxs.removeWidget(self.GenerCanvas[0])
+        self.warning1.hide()
         self.SNext.hide()
-        #self.sld1.hide()
-        #self.selectLabel.hide()
+        self.setPictRang.hide()
         self.ImgNext.hide()
         self.ImgPrev.hide()
         self.SavePicbtn.hide()
         self.setPictName.hide()
-        self.population.size = len(self.population.individs)
-        self.delornotPictureBtn.hide()
-        self.selectdelinfo.hide()
+        self.warning1.hide()
+        self.population.size = len(self.population.individs) ##изменение количество в популяяции идет здесь. Оно будет необходимо позже? Ибо ничего не удаляется.....
+        #self.delornotPictureBtn.hide()
+        #self.selectdelinfo.hide()
 
     def showCrossover(self):
         self.mainwind.setCurrentIndex(2)
@@ -349,6 +375,12 @@ class Interface(QMainWindow):
         self.mchangeColorBtn.hide()
         self.mchangePosBtn.hide()
 
+    def endCycle(self):
+        self.layout = 3
+        print(self.layout)
+        self.population.autoGenerating()
+        self.population.removeLoosers()
+        self.chageLay() #последним
 
     def callCrossover_1(self):
         self.population.crossover_1(self.GenerCanvas[0].pictNum, self.GenerCanvas[1].pictNum)
@@ -383,11 +415,6 @@ class Interface(QMainWindow):
             self.GenerCanvas[0].population.individs[self.GenerCanvas[0].pictNum - 1] = self.GenerCanvas[0].origPict
             self.GenerCanvas[0].changeImage()
 
-    #def changeValueSelect(self, value):
-    #    #self.selectLabel.setText("<div style ='color: #ff0000' >"+str(value)+"</div>")
-    #    pictind = self.GenerCanvas[0].pictNum-1
-    #    self.population.setFitToIndivid(value, pictind)
-
     def changedelstatus(self):
         self.GenerCanvas[0].population.individs[self.GenerCanvas[0].pictNum - 1].delInd = not self.GenerCanvas[0].population.individs[self.GenerCanvas[0].pictNum - 1].delInd
         if self.GenerCanvas[0].population.individs[self.GenerCanvas[0].pictNum - 1].delInd:
@@ -403,14 +430,14 @@ class Interface(QMainWindow):
             self.vboxs.removeWidget(self.GenerCanvas[canvacount])
             self.GenerCanvas[canvacount] = Canvas.Canvas( self.population, n)
             self.hboxs.addWidget(self.GenerCanvas[canvacount])
-            if self.population.individs[n-1].delInd:
-                self.selectdelinfo.setText("Изображение будет оставлено!")
-                self.delornotPictureBtn.setText("Удалить")
-            else:
-                self.selectdelinfo.setText("Данное изображение будет удалено!")
-                self.delornotPictureBtn.setText("Оставить")
-            self.selectdelinfo.adjustSize()
-            #self.sld1.setValue(self.population.individs[n-1].fit)
+            self.setPictRang.setText(str(self.GenerCanvas[0].population.individs[self.GenerCanvas[0].pictNum - 1].rang))
+            #if self.population.individs[n-1].delInd:
+            #    self.selectdelinfo.setText("Изображение будет оставлено!")
+            #    self.delornotPictureBtn.setText("Удалить")
+            #else:
+            #    self.selectdelinfo.setText("Данное изображение будет удалено!")
+            #    self.delornotPictureBtn.setText("Оставить")
+            #self.selectdelinfo.adjustSize()
         elif self.layout == 2 :
             self.vboxc[canvacount].removeWidget(self.GenerCanvas[canvacount])
             self.GenerCanvas[canvacount] = Canvas.Canvas( self.population, n)
@@ -435,6 +462,9 @@ class Interface(QMainWindow):
 
     def setSaveName(self,text):
         self.population.individs[self.GenerCanvas[0].pictNum-1].setName(text)
+
+    def callPictRangSetter(self, text):
+        self.population.setRang(text,self.GenerCanvas[0].pictNum-1)
 
     def savePicturefnc(self):
         self.GenerCanvas[0].savePicture()
@@ -461,14 +491,17 @@ class Interface(QMainWindow):
         if self.layout == 0:
             pass
         elif self.layout == 1:
+            self.setWindowTitle("Step 1: Selection")
             self.population.prepareToSelect()
             self.hideGeneration()
             self.hideMutation()
             self.showSelection()
         elif self.layout == 2:
+            self.setWindowTitle("Step 2: Crossover")
             self.hideSelection()
             self.showCrossover()
             self.population.prepareTOCrossover()
         elif self.layout == 3:
+            self.setWindowTitle("Step 3: Mutation")
             self.hideCrossover()
             self.showMutation()

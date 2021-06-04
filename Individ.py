@@ -6,16 +6,26 @@ import RectGen
 from random import randint
 from itertools import chain
 import copy
+from PIL import Image, ImageDraw
+from PIL.ImageQt import ImageQt
 
 class Individ(object):
     
     def __init__(self, x, y):
+        self.rang = 0
         self.sizeX = x
         self.sizeY = y
         self.gen = []
         self.fit = 0
         self.name = ''
         self.delInd = False
+        self.metrixval = 0
+
+    def generateImg(self):
+        self.img = Image.new("RGB",  (self.sizeX,self.sizeY), 'white')
+        self.imgDrawn = ImageDraw.Draw(self.img)
+        if self.gen:
+            self.imgDrawn = self.paintIndivid(self.imgDrawn)
 
     def generateCoord(self):
         x1 = randint(0,self.sizeX)
@@ -53,17 +63,17 @@ class Individ(object):
                 lent = len(self.gen) - 1
                 if lent >= 0:
                     self.gen[lent].generateGenom(coord[0],coord[1],coord[2],coord[3])
-
         for i in range(figersum): #перемешиваем для смены порядка прорисовки
             rand = randint(0, figersum-1)
             c = self.gen[0][i]
             self.gen[0][i] = self.gen[0][rand]
             self.gen[0][rand] = c
+        self.generateImg()
 
     def copyIndivid(self):
         newIndivid = Individ(self.sizeX,self.sizeY)
         newIndivid.gen = copy.deepcopy(self.gen)
-        print("copy", newIndivid.gen[0])
+        #print("copy", newIndivid.gen[0])
         return newIndivid
 
     def orderlyCrossing(self, par1, par2):
@@ -106,16 +116,19 @@ class Individ(object):
         self.orderlyCrossing(parent1, parent2)
         for i in range(1, len(parent1.gen)):
             self.gen.append(parent1.gen[i].returnNewGen_1(parent2.gen[i]))
+        self.generateImg()
 
     def generateByCrossover_2(self, parent1, parent2):
         self.orderlyCrossing(parent1, parent2)
         for i in range(1, len(parent1.gen)):
             self.gen.append(parent1.gen[i].returnNewGen_2(parent2.gen[i]))
+        self.generateImg()
 
     def generateByCrossover_3(self, parent1, parent2):
         self.orderlyCrossing(parent1, parent2)
         for i in range(1, len(parent1.gen)):
             self.gen.append(parent1.gen[i].returnNewGen_3(parent2.gen[i]))
+        self.generateImg()
 
     def generateByCrossover_4(self, parent1, parent2):
         self.orderlyCrossing(parent1, parent2)
@@ -123,6 +136,7 @@ class Individ(object):
             self.gen.append(copy.deepcopy(parent1.gen[i]))
         for i in range(len(parent1.gen)//2, len(parent1.gen)):
             self.gen.append(copy.deepcopy(parent2.gen[i]))
+        self.generateImg()
 
     def changeOrderfunc(self):
         randomgen1 = randint(0, len(self.gen[0])-1)
@@ -130,19 +144,28 @@ class Individ(object):
         buf = self.gen[0][randomgen1]
         self.gen[0][randomgen1] = self.gen[0][randomgen2]
         self.gen[0][randomgen2] = buf
+        self.generateImg()
 
     def changeColorfunc(self):
         randomgen = randint(1, len(self.gen[0]))
         self.gen[randomgen].PenColor = (randint(0,255),randint(0,255),randint(0,255))
         if self.gen[randomgen].BrushColor:
             self.gen[randomgen].BrushColor = (randint(0,255),randint(0,255),randint(0,255))
+        self.generateImg()
 
     def changePosfunc(self):
         randomgen = randint(1, len(self.gen[0]))
         coord = self.generateCoord()
         self.gen[randomgen].startPoints = [coord[0],coord[1]]
         self.gen[randomgen].endPoints = [coord[2],coord[3]]
+        self.generateImg()
 
+    #def setRang(self, text):
+    #    if text.isdigit():
+    #        n = int(text)
+    #        if n >= 250: ###
+    #            n = 250
+    #        self.canvaSize[1] = n
 
     def setName(self,text):
         if len(text) <= 25:
