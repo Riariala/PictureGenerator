@@ -28,12 +28,6 @@ class Canvas(QWidget):
             self.img = self.population.individs[self.pictNum-1].img
             self.imgDraw = self.population.individs[self.pictNum-1].imgDrawn
 
-    def paintEvent(self, e):
-        qp = QPainter()
-        qp.begin(self)
-        self.drawImage()
-        qp.end()
-
     def drawImage(self):
         qim = ImageQt(self.img)
         pixmap = QPixmap(QImage(qim))
@@ -65,13 +59,18 @@ class Canvas(QWidget):
         if not name:
             name = "untitled"
         count = 0
+        print(name)
         for address, dirs, files in os.walk("savedpict//"):
             nameaddition = ".jpg"
+            print(name)
             while (name + nameaddition) in files:
                 count += 1
                 nameaddition = "(" + str(count) +").jpg"
                 print(name, files, nameaddition)
+
         if count != 0:
             name += nameaddition
+        else:
+            name += ".jpg"
         savename = "savedpict//"+name
         self.img.save(savename)

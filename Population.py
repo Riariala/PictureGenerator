@@ -1,13 +1,15 @@
 import Individ
 from random import randint
 import numpy as np
+from skimage.metrics import structural_similarity as ssim
+from skimage import data, img_as_float
 
 class Population(object):
     
     def __init__(self):
         self.size = 0
         self.startize = 0
-        self.newgenarateSize = self.size * 2
+        self.newgenarateSize = self.size * 10
         self.subPopulation = []
         self.individs = []
         self.newgeneratedIndivids = []
@@ -15,6 +17,7 @@ class Population(object):
         self.countFigure = [0,0,0] #[circle, rect, line]
         self.oldIndivids = []
         self.mutationchance = 10
+        #self.indexImgToShow = 0
 
     def genetatePopulation(self):
         self.individs = []
@@ -27,8 +30,6 @@ class Population(object):
         self.subPopulation.size = self.size
 
     def prepareToSelect(self):
-        for i in self.newgeneratedIndivids:
-            self.individs.append(i)
         self.subPopulation = Population()
         self.subPopulation.canvaSize = self.canvaSize
         self.subPopulation.countFigure = self.countFigure
@@ -36,10 +37,6 @@ class Population(object):
 
     def prepareTOCrossover(self):
         self.oldIndivids = self.individs
-        #self.individs = []
-        #for i in self.oldIndivids:
-        #    if i.delInd:
-        #        self.individs.append(i)
 
     def autoGenerating(self):
         for i in self.subPopulation.individs:
@@ -87,42 +84,49 @@ class Population(object):
                 else:
                     break
             self.newgeneratedIndivids.append(individ)
-            #print(individ.gen[0])
             leftToGener -= 1
 
     def removeLoosers(self):
-        print("len ",len(self.newgeneratedIndivids))
-        metrixList = []
-        for i in range(len(self.newgeneratedIndivids)):
-            data = list(self.newgeneratedIndivids[i].img.getdata())
-            metrixval = 0
-            #print(self.newgeneratedIndivids[i].gen[0])
-            for j in self.oldIndivids:
-                data2 = list(j.img.getdata())
-                metrixval += self.countMetrix(data,data2) * j.rang
-                #print(metrixval)
-            metrixval /= (self.size + 1)/2 * self.size # 0 <= metrixval <= 1
-            metrixList.append([metrixval,i])
-            #print("metrix = ", metrixval)
-        metrixList.sort()
-        self.size = int(self.startize * 1.5)
-        
-        bord = self.startize //2
         self.individs = []
+        bord = self.size - self.startize //2 
+        self.size = int(self.startize * 1.5) 
         for i in self.oldIndivids:
-            if i.rang >= bord:
+            if i.rang > bord:
                 self.individs.append(i)
         rng = self.size-len(self.individs)
-        for i in range(rng):
-            self.individs.append(self.newgeneratedIndivids[metrixList[i][1]])
-            #print(self.newgeneratedIndivids[metrixList[i][1]].gen[0])
+        subpoplen  = len(self.subPopulation.individs)
+        for i in range(min(rng, subpoplen)):
+            self.individs.append(self.subPopulation.individs[i])
+        rng = self.size-len(self.individs)
+        if rng > 0:
+            metricsList = []
+            for i in range(len(self.newgeneratedIndivids)):
+                dat1 = img_as_float(self.newgeneratedIndivids[i].img)
+                metricsval = 0
+                for j in self.oldIndivids:
+                    dat2 = img_as_float(j.img)
+                    countmetr = ssim(dat1,dat2, multichannel=True)
+                    print("countermetrics",countmetr)
+                    if countmetr > 0.95: 
+                        metricsval = (self.size + 1)/2 * self.size #если будет слишком высокая степень схожестис одним из предыдущих элементов, то после сортировки и реверсирования масива, элемент окажется в конце
+                        break
+                    metricsval += countmetr / j.rang
+                metricsval /= (self.size + 1)/2 * self.size # 0 <= metrixval <= 1
+                metricsList.append([metricsval,i])
+            metricsList.sort()
+            metricsList = list(reversed(metricsList))
+            for i in range(rng):
+                self.individs.append(self.newgeneratedIndivids[metricsList[i][1]])
+        for i in self.individs:
+            i.rang = 0
 
-
-    def countMetrix(self, imgData1, imgData2):
+    def countMetrics(self, imgData1, imgData2):
         value = 0
         for i in range(len(imgData1)):
-            value += (((abs(imgData2[i][0] - imgData1[i][0])/255)**2 +(abs(imgData2[i][1] - imgData1[i][1])/255)**2+(abs(imgData2[i][2] - imgData1[i][2])/255)**2)/3) **(1/2) # 0 <= value <= 1
-        print("val", value)
+            value +=  ((
+                (abs(imgData2[i][0] - imgData1[i][0])/255)**2 +
+                (abs(imgData2[i][1] - imgData1[i][1])/255)**2 +
+                (abs(imgData2[i][2] - imgData1[i][2])/255)**2)/3) **(1/2) # 0 <= value <= 1
         return value/(self.canvaSize[0]*self.canvaSize[1])
        
     def crossover_1(self, par1, par2):
@@ -157,8 +161,8 @@ class Population(object):
     def setcanvaSizeX(self, text):
         if text.isdigit():
             n = int(text)
-            if n >= 250: ###
-                n = 250
+            if n >= 300: ###
+                n = 300
             self.canvaSize[0] = n
 
     def setRang(self, text, pictInd):
@@ -167,12 +171,14 @@ class Population(object):
             if n > self.size: 
                 n = 0
             self.individs[pictInd].rang = n
+        print(self.size)
+        print("ln ",len(self.individs))
 
     def setcanvaSizeY(self, text):
         if text.isdigit():
             n = int(text)
-            if n >= 250: ###
-                n = 250
+            if n >= 300: ###
+                n = 300
             self.canvaSize[1] = n
 
     def setCircleCount(self, text):
@@ -199,6 +205,6 @@ class Population(object):
     def setMutationChance(self,text):
         if text.isdigit():
             n = int(text)
-            if n > 100: 
-                n = 100
+            if n >= 100: 
+                n = 90
             self.mutationchance = n

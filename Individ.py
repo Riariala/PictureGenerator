@@ -73,36 +73,13 @@ class Individ(object):
     def copyIndivid(self):
         newIndivid = Individ(self.sizeX,self.sizeY)
         newIndivid.gen = copy.deepcopy(self.gen)
-        #print("copy", newIndivid.gen[0])
         return newIndivid
 
     def orderlyCrossing(self, par1, par2):
         leng = len(par1.gen[0])
         self.gen.append([0 for i in range(leng)])
-        #for i in range(leng):
-        #    self.gen[0].append(0)
         lenpart = leng//2
         firstHalf = randint(0, (leng-lenpart))
-        #ost = lenpart
-        #for i in range(leng):
-        #    k = randint(1,lenpart) * (ost*(i+1))
-        #    if k > 2*lenpart:
-        #        self.gen[0][i] = par2.gen[0][i]
-        #        ost -=1
-        #index = 0
-        #for i in range(leng):
-        #    while self.gen[0][index] == 0:
-        #        index +=1
-        #        print(index, i)
-        #        if index >=leng:
-        #            break
-        #    if index >=leng:
-        #        break
-        #    if par1.gen[0][i] not in self.gen[0]:
-        #        self.gen[0][index] = par1.gen[0][i]
-        #        #index+=1
-        #    else:
-        #        continue
         for i in range(firstHalf, firstHalf+lenpart):
             self.gen[0][i] = par2.gen[0][i]
         for i in chain(range(firstHalf), range(firstHalf+lenpart, leng)):
@@ -159,13 +136,6 @@ class Individ(object):
         self.gen[randomgen].startPoints = [coord[0],coord[1]]
         self.gen[randomgen].endPoints = [coord[2],coord[3]]
         self.generateImg()
-
-    #def setRang(self, text):
-    #    if text.isdigit():
-    #        n = int(text)
-    #        if n >= 250: ###
-    #            n = 250
-    #        self.canvaSize[1] = n
 
     def setName(self,text):
         if len(text) <= 25:

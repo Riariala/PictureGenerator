@@ -27,6 +27,9 @@
     <Compile Include="CircleGen.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Configcr.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Genom.py">
       <SubType>Code</SubType>
     </Compile>
