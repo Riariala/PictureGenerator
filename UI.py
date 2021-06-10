@@ -3,6 +3,7 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import QCoreApplication, Qt
 from PIL.ImageQt import ImageQt
+from PIL import Image
 import sys
 
 import Configcr
@@ -20,6 +21,12 @@ class Interface(QMainWindow):
         self.initUI()
         self.setAnotherLay()
         self.examleOfWork = []
+
+        ##########################
+        self.countGeneration = 0
+        self.originalImg = Image.open('btfl1.jpg') #
+
+        ##########################
 
     def initUI(self):
         self.setWindowTitle("Step 0: Generetion")
@@ -56,8 +63,10 @@ class Interface(QMainWindow):
         self.GNext.setGeometry(QtCore.QRect(995, 660, 500, 100))
         self.GNext.setFont(self.headFont)
         self.GNext.setStyleSheet("background-color: rgb(35,109,98); color: rgb(255, 255, 255); text-align: center;")
-        self.GNext.clicked.connect(self.chageLay) 
-        self.GNext.setEnabled(False)
+        #self.GNext.clicked.connect(self.chageLay) 
+        self.GNext.clicked.connect(self.startPlay) 
+        #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        #self.GNext.setEnabled(False)
         self.GNext.setParent(self.genLay)
 
         self.GenerateBtn = QtWidgets.QPushButton("Генерировать", self)
@@ -442,17 +451,15 @@ class Interface(QMainWindow):
 
 
     def showSelection(self):
-        #self.mainwind.setCurrentIndex(1) #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         self.GenerCanvas = [Canvas.Canvas(self.population, 1)]
         self.hboxs.addWidget(self.GenerCanvas[0])
         self.GenerCanvas[0].drawImage()
 
     def hideSelection(self):
         self.hboxs.removeWidget(self.GenerCanvas[0])
-        #self.population.size = len(self.population.individs) ##изменение количество в популяяии идет здесь. Оно будет необходимо позже? Ибо ничего не удаляется.....
+       
 
     def showCrossover(self):
-        #self.mainwind.setCurrentIndex(2)
         self.GenerCanvas = [Canvas.Canvas(self.population, 1), Canvas.Canvas(self.population, 1)]
         self.vboxc[0].addWidget(self.GenerCanvas[0])
         self.vboxc[1].addWidget(self.GenerCanvas[1])
@@ -462,10 +469,8 @@ class Interface(QMainWindow):
     def hideCrossover(self):
         self.vboxc[0].removeWidget(self.GenerCanvas[0])
         self.vboxc[1].removeWidget(self.GenerCanvas[1])
-        #self.CNext.hide()
 
     def showMutation(self):
-        #self.mainwind.setCurrentIndex(3)
         self.GenerCanvas = [Canvas.Canvas(self.population.subPopulation, 1)]
         self.vboxm.addWidget(self.GenerCanvas[0])
         self.GenerCanvas[0].drawImage()
@@ -606,3 +611,14 @@ class Interface(QMainWindow):
             self.setWindowTitle("Step 3: Mutation")
             self.hideCrossover()
             self.showMutation()
+
+    def startPlay(self):
+        self.useConfig()
+        self.population.genetatePopulation()
+        self.population.newgeneratedIndivids = self.population.individs
+        while self.countGeneration <= 100:
+            self.population.removeWorseFake(self.originalImg)
+            self.population.autoGeneratingFake()
+            if self.countGeneration % 10 == 0:
+                self.population.savePictureFake(str(self.countGeneration))
+            self.countGeneration += 1

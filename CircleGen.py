@@ -1,5 +1,5 @@
 from Genom import _Genom_
-from random import randint
+from random import randint, uniform
 
 class CircleGen(_Genom_):
     def __init__(self):
@@ -18,7 +18,7 @@ class CircleGen(_Genom_):
         self.PenColor = (randint(0,255),randint(0,255),randint(0,255))
         self.BrushColor = (randint(0,255),randint(0,255),randint(0,255))
 
-    def returnNewGen_1(self, neiborGen):
+    def returnNewGen_1(self, neiborGen): #просто делает цвет чем-то средним между родителями
         newGen = CircleGen()
         newGen.startPoints = self.startPoints
         newGen.endPoints = neiborGen.endPoints
@@ -28,8 +28,8 @@ class CircleGen(_Genom_):
         else:
             newGen.BrushColor = (int(self.BrushColor[0]), int(self.BrushColor[1]), int(self.BrushColor[2]))
         return newGen
-
-    def returnNewGen_2(self, neiborGen):
+     
+    def returnNewGen_2(self, neiborGen): #своя позиция, чужой цвет
         newGen = CircleGen()
         newGen.startPoints = neiborGen.startPoints
         newGen.endPoints = neiborGen.endPoints
@@ -39,16 +39,56 @@ class CircleGen(_Genom_):
 
     def returnNewGen_3(self, neiborGen):
         newGen = CircleGen()
-        newGen.startPoints = self.startPoints
-        newGen.endPoints = (self.endPoints[0], neiborGen.endPoints[1])
+        newGen.startPoints = [neiborGen.startPoints[0], self.startPoints[1]]
+        newGen.endPoints = [self.endPoints[0], neiborGen.endPoints[1]]
         newGen.PenColor = neiborGen.PenColor
         newGen.BrushColor = self.BrushColor
         return newGen
 
-    def returnNewGen_3(self, neiborGen):
+    def returnNewGen_blend(self, neiborGen):
         newGen = CircleGen()
-        newGen.startPoints = self.startPoints
-        newGen.endPoints = (self.endPoints[0], neiborGen.endPoints[1])
-        newGen.PenColor = neiborGen.PenColor
-        newGen.BrushColor = self.BrushColor
+        coef = uniform(0.5, 1.5)
+        for i in range(2):
+            value = int(abs(((1+coef)*self.startPoints[i] + (1-coef)*neiborGen.startPoints[i])/2))
+            newGen.startPoints[i] = value
+        for i in range(2):
+            value = int(abs(((1+coef)*self.endPoints[i] + (1-coef)*neiborGen.endPoints[i])/2))
+            newGen.endPoints[i] = value
+        value = []
+        if neiborGen.type != "l":
+            for i in range(3):
+                value.append(int(abs(((1+coef)*self.BrushColor[i] + (1-coef)*neiborGen.BrushColor[i])/2)))
+                if value[i] > 255:
+                    value[i] = abs(510 - value[i])
+            newGen.BrushColor = (value[0], value[1], value[2])
+            value = []
+        for i in range(3):
+            value.append(int(abs(((1+coef)*self.PenColor[i] + (1-coef)*neiborGen.PenColor[i])/2)))
+            if value[i] > 255:
+                value[i] = abs(510 - value[i])
+        newGen.BrushColor = (value[0], value[1], value[2])
+        return newGen
+
+    def returnNewGen_sharerand(self, neiborGen, randomGen):
+        newGen = CircleGen()
+        coef = uniform(0.5, 1.5)
+        for i in range(2):
+            value = int(abs(((1+coef)*self.startPoints[i] + (1-coef)*(neiborGen.startPoints[i] + randomGen.startPoints[i])/2)/2))
+            newGen.startPoints[i] = value
+        for i in range(2):
+            value = int(abs(((1+coef)*self.endPoints[i] + (1-coef)*(neiborGen.endPoints[i] + randomGen.endPoints[i])/2)/2))
+            newGen.endPoints[i] = value
+        value = []
+        if neiborGen.type != "l":
+            for i in range(3):
+                value.append(int(abs(((1+coef)*self.BrushColor[i] + (1-coef)*(neiborGen.BrushColor[i] + randomGen.BrushColor[i])/2)/2)))
+                if value[i] > 255:
+                    value[i] = abs(510 - value[i])
+            newGen.BrushColor = (value[0], value[1], value[2])
+            value = []
+        for i in range(3):
+            value.append(int(abs(((1+coef)*self.PenColor[i] + (1-coef)*(neiborGen.BrushColor[i] + randomGen.BrushColor[i])/2)/2)))
+            if value[i] > 255:
+                value[i] = abs(510 - value[i])
+        newGen.BrushColor = (value[0], value[1], value[2])
         return newGen
