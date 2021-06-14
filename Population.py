@@ -54,19 +54,15 @@ class Population(object):
             i.rang = 1
             self.newgeneratedIndivids.append(i)
         leftToGener = self.newgenarateSize - len(self.newgeneratedIndivids)
-        for i in self.oldIndivids:
-            print("rang",i.rang)
         while leftToGener > 0:
             allPie = (self.size + 1)/2 * self.size
             piePart1 = randint(1, allPie)
             countPieParts = 0
-            print("allPie", allPie)
             for i in self.oldIndivids:
                 countPieParts += i.rang
                 if piePart1 <= countPieParts:
                     parent1 = i
                     break
-            print("allPie-parent1.rang", allPie, parent1.rang)
             piePart2 = randint(1, (allPie-parent1.rang))
             parent2 = parent1
             for i in self.oldIndivids:
@@ -119,15 +115,12 @@ class Population(object):
                 for j in self.oldIndivids:
                     dat2 = img_as_float(j.img)
                     countmetr = mse(dat1, dat2)
-                    print("countermetrics",countmetr)
                     if countmetr <= 0.005:
                         self.newgeneratedIndivids[i].lookslike = True
                     metricsval += countmetr * ((j.rang **2)/halfrang**2-1) / 3
-                print("1",metricsval)
                 if metricsval != -1:
                     metricsval *= -1
                     self.newgeneratedIndivids[i].fit = metricsval
-                    print("2",metricsval)
                     metricsList[i] = metricsval
             list_keys = sorted(metricsList, key=metricsList.get)
             leftToStay = min(rng - rng//5, len(list_keys)) ##### 80% элитизм, для mse оказалось лучшим решением его увеличить
@@ -153,7 +146,6 @@ class Population(object):
                 countPieParts = 0
                 for i in self.newgeneratedIndivids:
                     if (i not in self.individs) and (i.fit not in alreadyin):
-                        print(i.fit, alreadyin)
                         countPieParts += i.rang
                         if piePart <= countPieParts:
                             self.individs.append(i)
@@ -172,11 +164,9 @@ class Population(object):
                 for j in range(len(self.individs)):
                     datcheck2 = img_as_float(self.individs[j].img)
                     countmetrch = mse(datcheck1, datcheck2)
-                    print("countmetrch", countmetrch)
                     if countmetrch != 0 and countmetrch <= 0.011:
                         self.individs[i].lookslike = True
                         break
-                #self.individs[i].rang = 1
             if countSimilar >= len(self.individs) * 2/3:
                 self.cont = True
             else:
@@ -261,7 +251,7 @@ class Population(object):
         individ.orderMate(self.individs[parent1-1], self.individs[parent2-1],self.countFigure)
         self.subPopulation.individs.append(individ)
 
-    def  callgenarate_1(self, parent1,parent2):
+    def callgenarate_1(self, parent1,parent2):
         individ = Individ.Individ(self.canvaSize[0], self.canvaSize[1])
         individ.genarate_1(self.individs[parent1-1],self.individs[parent2-1], self.countFigure)
         self.subPopulation.individs.append(individ)
@@ -277,128 +267,3 @@ class Population(object):
 
     def callDeepmutation(self, individIndex):
         self.individs[individIndex].deepmutation()
-
-
-    #def autoGeneratingFake(self):
-    #    self.newgeneratedIndivids = []
-    #    leftToGener = self.newgenarateSize
-    #    while leftToGener > 0:
-    #        allPie = (self.size + 1)/2 * self.size
-    #        piePart1 = randint(1, allPie)
-    #        countPieParts = 0
-    #        for i in self.oldIndivids:
-    #            countPieParts += i.rang
-    #            if piePart1 <= countPieParts:
-    #                parent1 = i
-    #                break
-    #        piePart2 = randint(1, (allPie-parent1.rang-1))
-    #        parent2 = parent1
-    #        for i in self.oldIndivids:
-    #            if i == parent1 and len(self.oldIndivids) != 1:
-    #                pass
-    #            else:
-    #                countPieParts += i.rang
-    #                if piePart1 <= countPieParts:
-    #                    parent2 = i
-    #                    break
-    #        genertype = randint(1, 1)
-    #        individ = Individ.Individ(self.canvaSize[0],self.canvaSize[1])
-    #        if genertype == 1:
-    #            individ.genarate_1(parent1,parent2, self.countFigure)
-    #        c = 10
-    #        while c > 0 :
-    #            generchance = randint(0, 100)
-    #            if generchance <= self.mutationchance:
-    #                genermuttype = randint(1, 5)
-    #                if genermuttype == 1:
-    #                    individ.floatmut()
-    #                elif genermuttype == 2:
-    #                    individ.changeplaces()
-    #                elif genermuttype == 3:
-    #                    individ.chaneOrder()
-    #                else:
-    #                    individ.deepmutation()
-    #                c -= 1
-    #            else:
-    #                break
-    #        self.newgeneratedIndivids.append(individ)
-    #        leftToGener -= 1
-    #    for i in self.individs:
-    #        self.newgeneratedIndivids.append(i)
-
-    #def removeWorseFake(self, origimg, isssim: bool):
-    #    self.individs = []
-    #    if self.size > 0:
-    #        metricsList = {}
-    #        for i in range(len(self.newgeneratedIndivids)):
-    #            dat1 = img_as_float(self.newgeneratedIndivids[i].img)
-    #            dat2 = img_as_float(origimg)
-    #            if isssim:
-    #                countmetr = ssim(dat1,dat2, multichannel=True)
-    #            else:
-    #                countmetr = mse(dat1,dat2) * (-1)
-    #            print("countermetrics",countmetr)
-    #            metricsList[countmetr] = i
-    #        list_keys = list(metricsList.keys())
-    #        list_keys.sort()
-    #        if isssim:
-    #            leftToStay = min((self.size+9)//10, len(list_keys)) #####
-    #        else:
-    #            leftToStay = min(self.size//2, len(list_keys)) #####
-    #        for i in range(len(list_keys)):
-    #            self.newgeneratedIndivids[metricsList[list_keys[i]]].rang = i+1
-    #        list_keys = list(reversed(list_keys))
-    #        rangList = {}
-    #        for i in range(leftToStay):
-    #            self.individs.append(self.newgeneratedIndivids[metricsList[list_keys[i]]])
-    #            rangList[self.individs[len(self.individs)-1].rang] = i
-    #        newindlen = len(self.newgeneratedIndivids)
-    #        allPie = (newindlen + 1)/2 * newindlen - (2*newindlen - leftToStay + 1)/2 * leftToStay
-    #        leftToStay = self.size - leftToStay
-    #        while leftToStay > 0:
-    #            piePart = randint(1, allPie)
-    #            countPieParts = 0
-    #            for i in self.newgeneratedIndivids:
-    #                if i not in self.individs:
-    #                    countPieParts += i.rang
-    #                    if piePart <= countPieParts:
-    #                        self.individs.append(i)
-    #                        allPie -= i.rang
-    #                        rangList[i.rang] = len(self.individs)-1
-    #                        leftToStay -= 1
-    #                        break
-    #        list_keys = list(rangList.keys())
-    #        list_keys.sort()
-    #        for i in range(len(list_keys)):
-    #            self.individs[rangList[list_keys[i]]].rang = i+1
-    #    self.oldIndivids = self.individs
-
-
-    #def savePictureFake(self, iternum: str, isssim):
-    #    if isssim:
-    #        folder = "ssim"
-    #    else:
-    #        folder = "mse"
-    #    if not os.path.isdir("savedpict"):
-    #        os.mkdir("savedpict")
-    #    if not os.path.isdir("savedpict//" + folder):
-    #        os.mkdir("savedpict//"+ folder)
-    #    folder += "//"
-    #    if not os.path.isdir("savedpict//" + folder + iternum):
-    #        os.mkdir("savedpict//"+ folder + iternum)
-    #    for i in self.individs:
-    #        name = str(i.rang)
-    #        if not name:
-    #            name = "untitled"
-    #        count = 0
-    #        for address, dirs, files in os.walk("savedpict//"+ folder +iternum):
-    #            nameaddition = ".jpg"
-    #            while (name + nameaddition) in files:
-    #                count += 1
-    #                nameaddition = "(" + str(count) +").jpg"
-    #        if count != 0:
-    #            name += nameaddition
-    #        else:
-    #            name += ".jpg"
-    #        savename = "savedpict//"+ folder + iternum + "//" + name
-    #        i.img.save(savename)

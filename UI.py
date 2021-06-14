@@ -20,13 +20,8 @@ class Interface(QMainWindow):
         self.GenerCanvas = [0,0]
         self.initUI()
         self.setAnotherLay()
-        self.examleOfWork = []
-
-        ###########################
         self.countGeneration = 0
-        #self.originalImg = Image.open('3.jpg') #
 
-        ###########################
 
     def initUI(self):
         self.setWindowTitle("Step 0: Generetion")
@@ -64,8 +59,6 @@ class Interface(QMainWindow):
         self.GNext.setFont(self.headFont)
         self.GNext.setStyleSheet("background-color: rgb(35,109,98); color: rgb(255, 255, 255); text-align: center;")
         self.GNext.clicked.connect(self.chageLay) 
-        #self.GNext.clicked.connect(self.startPlay) 
-        #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         self.GNext.setEnabled(False)
         self.GNext.setParent(self.genLay)
 
@@ -465,7 +458,6 @@ class Interface(QMainWindow):
             else:
                 self.nothingToMutateLbl.show()
 
-
     def showSelection(self):
         self.GenerCanvas = [Canvas.Canvas(self.population, 1)]
         self.warning1.setText("<div style='color: rgb(255, 255, 255); text-align: center;'>Расставьте уникальное значение для каждого изображения, где 1 - наименее подходящее изображение, "+str(self.population.size) +" - наиболее подходящее.</div>")
@@ -505,7 +497,6 @@ class Interface(QMainWindow):
         self.population.prepareTOCrossover()
         while self.population.cont:
             self.countGeneration += 1
-            #self.population.prepareTOCrossover()
             self.population.autoGenerating()
             self.population.removeLoosers()
         self.warning2.hide()
@@ -619,21 +610,3 @@ class Interface(QMainWindow):
             self.setWindowTitle("Step 3: Mutation")
             self.hideCrossover()
             self.showMutation()
-
-    #def startPlay(self):
-    #    for i in range(2):
-    #        self.countGeneration = 0
-    #        if i == 0:
-    #            isssim = False
-    #        else:
-    #            isssim = True
-    #        self.useConfig()
-    #        self.population.genetatePopulation()
-    #        self.population.newgeneratedIndivids = self.population.individs
-    #        #self.population.savePictureFake(str(self.countGeneration), isssim)
-    #        while self.countGeneration <= 1000:
-    #            self.population.removeWorseFake(self.originalImg, isssim)
-    #            self.population.autoGeneratingFake()
-    #            if self.countGeneration % 50 == 0:
-    #                self.population.savePictureFake(str(self.countGeneration), isssim)
-    #            self.countGeneration += 1

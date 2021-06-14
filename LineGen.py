@@ -1,5 +1,4 @@
 from Genom import _Genom_
-from random import randint,uniform
 
 class LineGen(_Genom_):
     def __init__(self):

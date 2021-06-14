@@ -1,5 +1,4 @@
 from Genom import _Genom_
-from random import randint, uniform
 from PIL import Image, ImageDraw
 from PIL.ImageQt import ImageQt
 

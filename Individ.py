@@ -130,7 +130,7 @@ class Individ(object):
 
     def genarate_1(self, parent1, parent2,countFigure):
         self.gen.append(self.mateTypeOrder(parent1, parent2, countFigure))
-        newones = cxSimulatedBinaryBounded(parent1.gen[1], parent2.gen[1], uniform(0.5,1.5), 0, 1)
+        newones = cxSimulatedBinaryBounded(parent1.gen[1], parent2.gen[1], uniform(15,20), 0, 1)
         self.gen.append(newones[randint(0,1)])
         self.generateImg()
 
@@ -159,5 +159,5 @@ class Individ(object):
 
     def deepmutation(self):
         self.chaneOrder()
-        returned = mutPolynomialBounded(self.gen[1], 0.8, 0, 1, 0.5)
+        returned = mutPolynomialBounded(self.gen[1], 20, 0, 1, 0.5)
         self.gen[1] = returned[0]
