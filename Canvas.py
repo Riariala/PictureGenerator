@@ -47,7 +47,6 @@ class Canvas(QWidget):
         return 1
 
     def decrPictNum(self):
-        print(self.pictNum)
         if self.pictNum > 1:
             return self.pictNum - 1
         return len(self.population.individs)
@@ -59,14 +58,11 @@ class Canvas(QWidget):
         if not name:
             name = "untitled"
         count = 0
-        print(name)
         for address, dirs, files in os.walk("savedpict//"):
             nameaddition = ".jpg"
-            print(name)
             while (name + nameaddition) in files:
                 count += 1
                 nameaddition = "(" + str(count) +").jpg"
-                print(name, files, nameaddition)
 
         if count != 0:
             name += nameaddition

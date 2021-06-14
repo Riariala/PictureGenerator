@@ -22,11 +22,11 @@ class Interface(QMainWindow):
         self.setAnotherLay()
         self.examleOfWork = []
 
-        ##########################
+        ###########################
         self.countGeneration = 0
-        self.originalImg = Image.open('btfl1.jpg') #
+        #self.originalImg = Image.open('3.jpg') #
 
-        ##########################
+        ###########################
 
     def initUI(self):
         self.setWindowTitle("Step 0: Generetion")
@@ -63,10 +63,10 @@ class Interface(QMainWindow):
         self.GNext.setGeometry(QtCore.QRect(995, 660, 500, 100))
         self.GNext.setFont(self.headFont)
         self.GNext.setStyleSheet("background-color: rgb(35,109,98); color: rgb(255, 255, 255); text-align: center;")
-        #self.GNext.clicked.connect(self.chageLay) 
-        self.GNext.clicked.connect(self.startPlay) 
+        self.GNext.clicked.connect(self.chageLay) 
+        #self.GNext.clicked.connect(self.startPlay) 
         #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        #self.GNext.setEnabled(False)
+        self.GNext.setEnabled(False)
         self.GNext.setParent(self.genLay)
 
         self.GenerateBtn = QtWidgets.QPushButton("Генерировать", self)
@@ -78,7 +78,7 @@ class Interface(QMainWindow):
 
         self.GentextLbl =  QLabel(self)
         self.GentextLbl.setText("<div style='color: rgb(255, 255, 255); '> Пример изображения: </div>")
-        self.GentextLbl.setGeometry(QtCore.QRect(995, 110, 500, 150))
+        self.GentextLbl.setGeometry(QtCore.QRect(995, 95, 500, 150))
         self.GentextLbl.setWordWrap(True)
         self.GentextLbl.setFont(self.headFont)
         self.GentextLbl.setParent(self.genLay)
@@ -203,11 +203,26 @@ class Interface(QMainWindow):
         self.SavePicbtn.setStyleSheet("background-color: rgb(35,109,98); color: rgb(255, 255, 255); text-align: center;")
         self.SavePicbtn.setParent(self.selLay)
         self.SavePicbtn.clicked.connect(self.savePicturefnc)
+
         self.setPictName = QtWidgets.QLineEdit(self)
         self.setPictName.setGeometry(QtCore.QRect(995, 255, 500, 60))
         self.setPictName.setFont(self.mainFont)
         self.setPictName.textChanged[str].connect(self.setSaveName)
         self.setPictName.setParent(self.selLay)
+
+        self.selgradeInfo =  QLabel(self)
+        self.selgradeInfo.setGeometry(QtCore.QRect(995, 470, 500, 150))
+        self.selgradeInfo.setText("<div style='color: rgb(255, 255, 255); text-align: center;'> </div>")
+        self.selgradeInfo.setFont(self.headFont)
+        self.selgradeInfo.setWordWrap(True)
+        self.selgradeInfo.setParent(self.selLay)
+
+        self.selgradeInfo2 =  QLabel(self)
+        self.selgradeInfo2.setGeometry(QtCore.QRect(995, 430, 500, 40))
+        self.selgradeInfo2.setText("<div style='color: rgb(255, 255, 255); text-align: center;'> Выставьте следующие оценки: </div>")
+        self.selgradeInfo2.setFont(self.mainFont)
+        self.selgradeInfo2.setWordWrap(True)
+        self.selgradeInfo2.setParent(self.selLay)
 
         self.warning1 =  QLabel(self)
         self.warning1.setGeometry(QtCore.QRect(0, 100, 990, 100))
@@ -300,44 +315,24 @@ class Interface(QMainWindow):
         self.parent2PrevBtn.clicked.connect(self.callPrevPict(1))
         self.parent2NextBtn.clicked.connect(self.callNextPict(1))
 
-        self.crossway1 = QtWidgets.QPushButton("Перемешать гены через один", self)
+        self.crossway1 = QtWidgets.QPushButton("Смешать порядок", self)
         self.crossway1.setGeometry(QtCore.QRect(995, 120, 500, 90))
         self.crossway1.setParent(self.crosLay)
         self.crossway1.setFont(self.mainFont)
         self.crossway1.setStyleSheet("background-color: rgb(35,109,98); color: rgb(255, 255, 255); text-align: center;")
-        self.crossway1.clicked.connect(self.callCrossover_1)
+        self.crossway1.clicked.connect(self.callOrderMate)
 
-        self.crossway2 = QtWidgets.QPushButton("Поменять цветами", self)
+        self.crossway2 = QtWidgets.QPushButton("Полное смешивание", self)
         self.crossway2.setGeometry(QtCore.QRect(995, 220, 500, 90))
         self.crossway2.setParent(self.crosLay)
         self.crossway2.setFont(self.mainFont)
         self.crossway2.setStyleSheet("background-color: rgb(35,109,98); color: rgb(255, 255, 255); text-align: center;")
-        self.crossway2.clicked.connect(self.callCrossover_2)
-
-        self.crossway3 = QtWidgets.QPushButton("Двухточечное смешение", self)
-        self.crossway3.setGeometry(QtCore.QRect(995, 320, 500, 90))
-        self.crossway3.setParent(self.crosLay)
-        self.crossway3.setFont(self.mainFont)
-        self.crossway3.setStyleSheet("background-color: rgb(35,109,98); color: rgb(255, 255, 255); text-align: center;")
-        self.crossway3.clicked.connect(self.callCrossover_3)
-
-        self.crossway4 = QtWidgets.QPushButton("50 на 50", self)
-        self.crossway4.setGeometry(QtCore.QRect(995, 420, 500, 90))
-        self.crossway4.setParent(self.crosLay)
-        self.crossway4.setFont(self.mainFont)
-        self.crossway4.setStyleSheet("background-color: rgb(35,109,98); color: rgb(255, 255, 255); text-align: center;")
-        self.crossway4.clicked.connect(self.callCrossover_4)
+        self.crossway2.clicked.connect(self.callGenerate_1)
 
 
                 #Mutation
-        #self.mutLay = QWidget()
-        #self.mainwind.addWidget(self.mutLay)
         self.vboxm = QVBoxLayout()
         self.hboxm = QHBoxLayout()
-        #self.vboxm.addLayout(self.hboxm)
-        #self.mutLay.setLayout(self.vboxm)
-        #self.hboxm.insertSpacing(0, 650)
-        #self.vboxm.insertSpacing(0, 200)
 
         self.MutNameLbl =  QLabel(self)
         self.MutNameLbl.setText("<div style='color: rgb(255, 255, 255); background-color: rgb(45,125,120); text-align: center; padding-top: 20px;'> Выбор родителей и метода скрещивания </div>")
@@ -352,6 +347,13 @@ class Interface(QMainWindow):
         self.MNext.setStyleSheet("background-color: rgb(35,109,98); color: rgb(255, 255, 255); text-align: center;")
         self.MNext.clicked.connect(self.endCycle)
 
+        self.nothingToMutateLbl = QLabel(self)
+        self.nothingToMutateLbl.setGeometry(QtCore.QRect(352, 252, 295, 295))
+        self.nothingToMutateLbl.setText("<div style='color: rgb(255, 255, 255); text-align: center;'>Вами не было сгенерировано ни одного изображения :(</div>")
+        self.nothingToMutateLbl.setFont(self.mainFont)
+        self.nothingToMutateLbl.setWordWrap(True)
+        self.nothingToMutateLbl.setParent(self.mutLay)
+        self.nothingToMutateLbl.hide()
 
         self.mutPictNextBtn = QtWidgets.QPushButton("►", self)
         self.mutPictNextBtn.setGeometry(QtCore.QRect(690, 350, 60, 80))
@@ -366,37 +368,42 @@ class Interface(QMainWindow):
         self.mutPictPrevBtn.clicked.connect(self.callPrevPict(0))
         self.mutPictNextBtn.clicked.connect(self.callNextPict(0))
 
-        self.mchangeOrderBtn = QtWidgets.QPushButton("Сменить порядок", self)
-        self.mchangeOrderBtn.setGeometry(QtCore.QRect(995, 120, 500, 90))
+        self.mchangegenBtn = QtWidgets.QPushButton("Мутировать ген", self)
+        self.mchangegenBtn.setGeometry(QtCore.QRect(995, 120, 500, 90))
+        self.mchangegenBtn.setParent(self.mutLay)
+        self.mchangegenBtn.setFont(self.mainFont)
+        self.mchangegenBtn.setStyleSheet("background-color: rgb(35,109,98); color: rgb(255, 255, 255); text-align: center;")
+        self.mchangegenBtn.clicked.connect(self.callFloatmutprsd)
+
+        self.mchangeOrderBtn = QtWidgets.QPushButton("Изменить порядок", self)
+        self.mchangeOrderBtn.setGeometry(QtCore.QRect(995, 220, 500, 90))
         self.mchangeOrderBtn.setParent(self.mutLay)
         self.mchangeOrderBtn.setFont(self.mainFont)
         self.mchangeOrderBtn.setStyleSheet("background-color: rgb(35,109,98); color: rgb(255, 255, 255); text-align: center;")
-        self.mchangeOrderBtn.clicked.connect(self.changeOrder)
+        self.mchangeOrderBtn.clicked.connect(self.callChaneOrderprsd)
 
-        self.mchangeColorBtn = QtWidgets.QPushButton("Сменить цвет", self)
-        self.mchangeColorBtn.setGeometry(QtCore.QRect(995, 220, 500, 90))
-        self.mchangeColorBtn.setParent(self.mutLay)
-        self.mchangeColorBtn.setFont(self.mainFont)
-        self.mchangeColorBtn.setStyleSheet("background-color: rgb(35,109,98); color: rgb(255, 255, 255); text-align: center;")
-        self.mchangeColorBtn.clicked.connect(self.changeColor)
+        self.mchangePlaceBtn = QtWidgets.QPushButton("Поменять местами\nдва гена", self)
+        self.mchangePlaceBtn.setGeometry(QtCore.QRect(995, 320, 500, 90))
+        self.mchangePlaceBtn.setParent(self.mutLay)
+        self.mchangePlaceBtn.setFont(self.mainFont)
+        self.mchangePlaceBtn.setStyleSheet("background-color: rgb(35,109,98); color: rgb(255, 255, 255); text-align: center;")
+        self.mchangePlaceBtn.clicked.connect(self.callChangeplacesprsd)
 
-        self.mchangePosBtn = QtWidgets.QPushButton("Сменить положение", self)
-        self.mchangePosBtn.setGeometry(QtCore.QRect(995, 320, 500, 90))
-        self.mchangePosBtn.setParent(self.mutLay)
-        self.mchangePosBtn.setFont(self.mainFont)
-        self.mchangePosBtn.setStyleSheet("background-color: rgb(35,109,98); color: rgb(255, 255, 255); text-align: center;")
-        self.mchangePosBtn.clicked.connect(self.changePos)
+        self.mdeepChangeBtn = QtWidgets.QPushButton("Глобальные изменения", self)
+        self.mdeepChangeBtn.setGeometry(QtCore.QRect(995, 420, 500, 90))
+        self.mdeepChangeBtn.setParent(self.mutLay)
+        self.mdeepChangeBtn.setFont(self.mainFont)
+        self.mdeepChangeBtn.setStyleSheet("background-color: rgb(35,109,98); color: rgb(255, 255, 255); text-align: center;")
+        self.mdeepChangeBtn.clicked.connect(self.callDeepmutationprsd)
 
         self.mcancelMutationbtn = QtWidgets.QPushButton("Отмена изменений", self)
-        self.mcancelMutationbtn.setGeometry(QtCore.QRect(995, 450, 500, 90))
+        self.mcancelMutationbtn.setGeometry(QtCore.QRect(995, 550, 500, 90))
         self.mcancelMutationbtn.setParent(self.mutLay)
         self.mcancelMutationbtn.setFont(self.mainFont)
         self.mcancelMutationbtn.setStyleSheet("background-color: rgb(35,109,98); color: rgb(255, 255, 255); text-align: center;")
         self.mcancelMutationbtn.clicked.connect(self.canselMutation)
 
 
-        #self.maintab.setTabVisible(0, True)
-        #self.mainwind.setCurrentIndex(0)
         self.maintab.setTabVisible(3, False)
         self.maintab.setTabVisible(2, False)
         self.maintab.setTabVisible(1, False)
@@ -422,6 +429,12 @@ class Interface(QMainWindow):
             self.maintab.setTabVisible(0, False)
             self.maintab.setTabVisible(3, False)
             self.maintab.setTabVisible(1, True)
+            text = "<div style='color: rgb(255, 255, 255); text-align: center;'>"
+            for i in self.population.gradeLeft:
+                if i != 0:
+                    text +=  str(i) + "\t"
+            text += "</div>"
+            self.selgradeInfo.setText(text)
             painter.drawImage(QtCore.QRect
                                 (220+(500-self.population.canvaSize[0])//2,
                                 280+(400-self.population.canvaSize[1])//2, 
@@ -443,21 +456,24 @@ class Interface(QMainWindow):
         elif self.layout == 3:
             self.maintab.setTabVisible(2, False)
             self.maintab.setTabVisible(3, True)
-            painter.drawImage(QtCore.QRect
-                                (330 +(300-self.population.canvaSize[0])//2,
-                                250+(300-self.population.canvaSize[1])//2, 
-                                self.population.canvaSize[0],self.population.canvaSize[1]),
-                                QImage(ImageQt(self.GenerCanvas[0].population.individs[self.GenerCanvas[0].pictNum-1].img)))
+            if self.GenerCanvas[0].population.individs:
+                painter.drawImage(QtCore.QRect
+                                    (330 +(300-self.population.canvaSize[0])//2,
+                                    250+(300-self.population.canvaSize[1])//2, 
+                                    self.population.canvaSize[0],self.population.canvaSize[1]),
+                                    QImage(ImageQt(self.GenerCanvas[0].population.individs[self.GenerCanvas[0].pictNum-1].img)))
+            else:
+                self.nothingToMutateLbl.show()
 
 
     def showSelection(self):
         self.GenerCanvas = [Canvas.Canvas(self.population, 1)]
+        self.warning1.setText("<div style='color: rgb(255, 255, 255); text-align: center;'>Расставьте уникальное значение для каждого изображения, где 1 - наименее подходящее изображение, "+str(self.population.size) +" - наиболее подходящее.</div>")
         self.hboxs.addWidget(self.GenerCanvas[0])
         self.GenerCanvas[0].drawImage()
 
     def hideSelection(self):
-        self.hboxs.removeWidget(self.GenerCanvas[0])
-       
+        self.hboxs.removeWidget(self.GenerCanvas[0])    
 
     def showCrossover(self):
         self.GenerCanvas = [Canvas.Canvas(self.population, 1), Canvas.Canvas(self.population, 1)]
@@ -485,46 +501,38 @@ class Interface(QMainWindow):
                     self.warning2.show()
                     return
         self.layout = 3
-        print(self.layout)
+        self.population.cont = True
         self.population.prepareTOCrossover()
-        self.population.autoGenerating()
-        self.population.removeLoosers()
+        while self.population.cont:
+            self.countGeneration += 1
+            #self.population.prepareTOCrossover()
+            self.population.autoGenerating()
+            self.population.removeLoosers()
         self.warning2.hide()
         self.chageLay() #последним
 
-    def callCrossover_1(self):
-        self.population.crossover_1(self.GenerCanvas[0].pictNum, self.GenerCanvas[1].pictNum)
+    def callOrderMate(self):
+        self.population.orderMate(self.GenerCanvas[0].pictNum, self.GenerCanvas[1].pictNum)
 
-    def callCrossover_2(self):
-        self.population.crossover_2(self.GenerCanvas[0].pictNum, self.GenerCanvas[1].pictNum)
+    def callGenerate_1(self):
+        self.population.callgenarate_1(self.GenerCanvas[0].pictNum, self.GenerCanvas[1].pictNum)
+    
+    def callFloatmutprsd(self):
+        self.GenerCanvas[0].population.callFloatmut(self.GenerCanvas[0].pictNum - 1)
 
-    def callCrossover_3(self):
-        self.population.crossover_3(self.GenerCanvas[0].pictNum, self.GenerCanvas[1].pictNum)
+    def callChangeplacesprsd(self):
+        self.GenerCanvas[0].population.callFloatmut(self.GenerCanvas[0].pictNum - 1)
 
-    def callCrossover_4(self):
-        self.population.crossover_4(self.GenerCanvas[0].pictNum, self.GenerCanvas[1].pictNum)
+    def callChaneOrderprsd(self):
+        self.GenerCanvas[0].population.callChaneOrder(self.GenerCanvas[0].pictNum - 1)
 
-    def changeOrder(self):
-        self.population.subPopulation.individs[self.GenerCanvas[0].pictNum - 1].changeOrderfunc()
-        self.GenerCanvas[0].population = self.population.subPopulation
-        self.GenerCanvas[0].population.individs[self.GenerCanvas[0].pictNum - 1].generateImg()
-
-    def changeColor(self):
-        self.population.subPopulation.individs[self.GenerCanvas[0].pictNum - 1].changeColorfunc()
-        self.GenerCanvas[0].population = self.population.subPopulation
-        self.GenerCanvas[0].population.individs[self.GenerCanvas[0].pictNum - 1].generateImg()
-
-    def changePos(self):
-        self.population.subPopulation.individs[self.GenerCanvas[0].pictNum - 1].changePosfunc()
-        self.GenerCanvas[0].population = self.population.subPopulation
-        self.GenerCanvas[0].population.individs[self.GenerCanvas[0].pictNum - 1].generateImg()
+    def callDeepmutationprsd(self):
+        self.GenerCanvas[0].population.callDeepmutation(self.GenerCanvas[0].pictNum - 1)
 
     def canselMutation(self):
-        print(self.GenerCanvas[0].population.individs[self.GenerCanvas[0].pictNum - 1].gen[0],self.GenerCanvas[0].origPict.gen[0] )
         if self.GenerCanvas[0].origPict:
             self.GenerCanvas[0].population.individs[self.GenerCanvas[0].pictNum - 1] = self.GenerCanvas[0].origPict
             self.GenerCanvas[0].population.individs[self.GenerCanvas[0].pictNum - 1].generateImg()
-            #self.GenerCanvas[0].changeImage()
 
     def drawPictINCurrLay(self, canvacount, n):
         if self.layout == 1 :
@@ -564,7 +572,7 @@ class Interface(QMainWindow):
         self.GenerCanvas[0].savePicture()
 
     def repaintImage(self):
-        if self.population.canvaSize[0] !=0 and  self.population.canvaSize[1] !=0:
+        if self.population.canvaSize[0] != 0 and self.population.canvaSize[1] != 0:
             if self.population.size !=0:
                 self.population.genetatePopulation()
                 if self.GenerCanvas[0] != 0:
@@ -612,13 +620,20 @@ class Interface(QMainWindow):
             self.hideCrossover()
             self.showMutation()
 
-    def startPlay(self):
-        self.useConfig()
-        self.population.genetatePopulation()
-        self.population.newgeneratedIndivids = self.population.individs
-        while self.countGeneration <= 100:
-            self.population.removeWorseFake(self.originalImg)
-            self.population.autoGeneratingFake()
-            if self.countGeneration % 10 == 0:
-                self.population.savePictureFake(str(self.countGeneration))
-            self.countGeneration += 1
+    #def startPlay(self):
+    #    for i in range(2):
+    #        self.countGeneration = 0
+    #        if i == 0:
+    #            isssim = False
+    #        else:
+    #            isssim = True
+    #        self.useConfig()
+    #        self.population.genetatePopulation()
+    #        self.population.newgeneratedIndivids = self.population.individs
+    #        #self.population.savePictureFake(str(self.countGeneration), isssim)
+    #        while self.countGeneration <= 1000:
+    #            self.population.removeWorseFake(self.originalImg, isssim)
+    #            self.population.autoGeneratingFake()
+    #            if self.countGeneration % 50 == 0:
+    #                self.population.savePictureFake(str(self.countGeneration), isssim)
+    #            self.countGeneration += 1
